@@ -1,0 +1,355 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 1. 核心颜色变量 (最先定义) -->
+    <SolidColorBrush x:Key="MagicBgBrush" Color="#f0fdfa"/>
+    <SolidColorBrush x:Key="MagicPanelBgBrush" Color="#F2FFFFFF"/>
+    <SolidColorBrush x:Key="MagicBorderLightBrush" Color="#bbf7d0"/>
+    <SolidColorBrush x:Key="MagicBorderDarkBrush" Color="#34d399"/>
+    <SolidColorBrush x:Key="MagicShadowBrush" Color="#10b981"/>
+    <SolidColorBrush x:Key="MagicTextDarkBrush" Color="#064e3b"/>
+    <SolidColorBrush x:Key="MagicTextMediumBrush" Color="#059669"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#67c23a"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#f56c6c"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#e6a23c"/>
+    <SolidColorBrush x:Key="BtnSecondaryBgBrush" Color="#f1f5f9"/>
+    <SolidColorBrush x:Key="BtnSecondaryTextBrush" Color="#475569"/>
+    <SolidColorBrush x:Key="BtnSecondaryBorderBrush" Color="#94a3b8"/>
+    <SolidColorBrush x:Key="BtnSecondaryShadowBrush" Color="#64748b"/>
+    <SolidColorBrush x:Key="BtnDangerBgBrush" Color="#fee2e2"/>
+    <SolidColorBrush x:Key="BtnDangerTextBrush" Color="#991b1b"/>
+    <SolidColorBrush x:Key="BtnDangerBorderBrush" Color="#fca5a5"/>
+    <SolidColorBrush x:Key="BtnDangerShadowBrush" Color="#ef4444"/>
+    <SolidColorBrush x:Key="BtnActionBgBrush" Color="#a7f3d0"/>
+    <SolidColorBrush x:Key="BtnActionTextBrush" Color="#047857"/>
+    <SolidColorBrush x:Key="BtnActionBorderBrush" Color="#34d399"/>
+    <SolidColorBrush x:Key="BtnActionShadowBrush" Color="#10b981"/>
+
+    <!-- 2. 字体和画刷 -->
+    <FontFamily x:Key="DefaultFont">system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif</FontFamily>
+    <FontFamily x:Key="MonoFont">'Courier New', Courier, monospace</FontFamily>
+    <LinearGradientBrush x:Key="RainbowBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="#42d392" Offset="0.0" />
+        <GradientStop Color="#647eff" Offset="0.25" />
+        <GradientStop Color="#ff5c5c" Offset="0.5" />
+        <GradientStop Color="#f9ce34" Offset="0.75" />
+        <GradientStop Color="#42d392" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <!-- 3. 基础样式 (没有依赖的) -->
+    <Style x:Key="ContentPanelStyle" TargetType="Border">
+        <Setter Property="Padding" Value="25"/>
+        <Setter Property="Background" Value="{StaticResource MagicPanelBgBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource MagicBorderLightBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect ShadowDepth="4" Direction="270" Color="{Binding Source={StaticResource MagicShadowBrush}, Path=Color}" Opacity="0.8" BlurRadius="4"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="AppTitleStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="28.8"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{StaticResource RainbowBrush}"/>
+    </Style>
+
+    <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="19.2"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource MagicTextMediumBrush}"/>
+        <Setter Property="Margin" Value="0,0,0,15"/>
+    </Style>
+
+    <Style x:Key="WindowControlButton" TargetType="Button">
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource MagicTextDarkBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource MagicBorderLightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- 4. 控件样式 -->
+    <!-- 4.1 按钮 -->
+    <Style x:Key="MimiButtonBaseStyle" TargetType="Button">
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="15,0"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontFamily" Value="{StaticResource DefaultFont}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border x:Name="Shadow" CornerRadius="10" Background="{TemplateBinding Tag}" Margin="2,2,0,0"/>
+                        <Border x:Name="Body" CornerRadius="10" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Body" Property="RenderTransform">
+                                <Setter.Value>
+                                    <TranslateTransform X="-1" Y="-1"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="Shadow" Property="Margin" Value="3,3,0,0"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Body" Property="RenderTransform">
+                                <Setter.Value>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="Shadow" Property="Margin" Value="1,1,0,0"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="#f1f3f5"/>
+                            <Setter Property="Foreground" Value="#adb5bd"/>
+                            <Setter Property="BorderBrush" Value="#e9ecef"/>
+                            <Setter TargetName="Shadow" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MimiButtonSecondaryStyle" TargetType="Button" BasedOn="{StaticResource MimiButtonBaseStyle}">
+        <Setter Property="Background" Value="{StaticResource BtnSecondaryBgBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource BtnSecondaryTextBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BtnSecondaryBorderBrush}"/>
+        <Setter Property="Tag" Value="{StaticResource BtnSecondaryShadowBrush}"/>
+    </Style>
+    <Style x:Key="MimiButtonDangerStyle" TargetType="Button" BasedOn="{StaticResource MimiButtonBaseStyle}">
+        <Setter Property="Background" Value="{StaticResource BtnDangerBgBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource BtnDangerTextBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BtnDangerBorderBrush}"/>
+        <Setter Property="Tag" Value="{StaticResource BtnDangerShadowBrush}"/>
+    </Style>
+    <Style x:Key="MimiButtonActionStyle" TargetType="Button" BasedOn="{StaticResource MimiButtonBaseStyle}">
+        <Setter Property="Background" Value="{StaticResource BtnActionBgBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource BtnActionTextBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BtnActionBorderBrush}"/>
+        <Setter Property="Tag" Value="{StaticResource BtnActionShadowBrush}"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+    <!-- ★★★★★ 修正了这里的闭合标签 ★★★★★ -->
+
+    <!-- 4.2 输入框和下拉框 -->
+    <Style x:Key="MimiTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="FontFamily" Value="{StaticResource DefaultFont}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Grid>
+                        <Border x:Name="Shadow" CornerRadius="10" Background="{StaticResource MagicShadowBrush}" Margin="2,2,0,0"/>
+                        <Border x:Name="Body" CornerRadius="10" BorderThickness="2" BorderBrush="{StaticResource MagicBorderDarkBrush}" Background="{StaticResource MagicPanelBgBrush}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" Margin="8,0"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter TargetName="Body" Property="BorderBrush" Value="{StaticResource MagicShadowBrush}"/>
+                            <Setter TargetName="Body" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect ShadowDepth="0" Color="{Binding Source={StaticResource MagicShadowBrush}, Path=Color}" Opacity="0.4" BlurRadius="8"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MimiComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <Border x:Name="Shadow" CornerRadius="10" Background="{StaticResource MagicShadowBrush}" Margin="2,2,0,0"/>
+                        <ToggleButton x:Name="ToggleButton" Focusable="false" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border x:Name="Body" CornerRadius="10" BorderThickness="2" BorderBrush="{StaticResource MagicBorderDarkBrush}" Background="{StaticResource MagicPanelBgBrush}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="30"/>
+                                            </Grid.ColumnDefinitions>
+                                            <ContentPresenter Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Content="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ComboBox}}"/>
+                                            <Path Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" Fill="{StaticResource MagicTextMediumBrush}"/>
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                            <Setter TargetName="Body" Property="BorderBrush" Value="{StaticResource MagicShadowBrush}"/>
+                                            <Setter TargetName="Body" Property="Effect">
+                                                <Setter.Value>
+                                                    <DropShadowEffect ShadowDepth="0" Color="{Binding Source={StaticResource MagicShadowBrush}, Path=Color}" Opacity="0.4" BlurRadius="8"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter TargetName="Body" Property="BorderBrush" Value="{StaticResource MagicShadowBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+                        <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+                            <Border CornerRadius="12" BorderThickness="2" BorderBrush="{StaticResource MagicBorderDarkBrush}" Background="{StaticResource MagicPanelBgBrush}" Margin="0,5,0,0">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="4" Direction="270" Color="{Binding Source={StaticResource MagicShadowBrush}, Path=Color}" Opacity="0.8" BlurRadius="4" />
+                                </Border.Effect>
+                                <ScrollViewer MaxHeight="200" CanContentScroll="True">
+                                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Padding" Value="10,8"/>
+                    <Setter Property="Margin" Value="6"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ComboBoxItem">
+                                <Border x:Name="Bd" Padding="{TemplateBinding Padding}" CornerRadius="8" Background="Transparent">
+                                    <ContentPresenter/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsHighlighted" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="{StaticResource MagicBorderLightBrush}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="{StaticResource MagicShadowBrush}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 4.3 单选按钮 (确保依赖在后面) -->
+    <!-- 这是被依赖的基础样式 -->
+    <Style x:Key="MimiRadioButtonStyle" TargetType="RadioButton">
+        <Setter Property="Background" Value="{StaticResource BtnSecondaryBgBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource BtnSecondaryTextBrush}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid>
+                        <Border x:Name="Shadow" Background="{StaticResource BtnSecondaryShadowBrush}" Margin="2,2,0,0"/>
+                        <Border x:Name="Body" Background="{TemplateBinding Background}" BorderBrush="{StaticResource BtnSecondaryBorderBrush}" BorderThickness="2,2,0,2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,8"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" Value="{StaticResource MagicTextMediumBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter TargetName="Body" Property="BorderBrush" Value="{StaticResource MagicShadowBrush}"/>
+                            <Setter TargetName="Shadow" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="Body" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect ShadowDepth="2" Direction="270" Color="Black" Opacity="0.2" BlurRadius="4" RenderingBias="Quality"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- 这是依赖的样式，必须放在后面 -->
+    <Style x:Key="FirstMimiRadioButton" TargetType="RadioButton" BasedOn="{StaticResource MimiRadioButtonStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid>
+                        <Border x:Name="Shadow" CornerRadius="10,0,0,10" Background="{StaticResource BtnSecondaryShadowBrush}" Margin="2,2,0,0"/>
+                        <Border x:Name="Body" CornerRadius="10,0,0,10" Background="{TemplateBinding Background}" BorderBrush="{StaticResource BtnSecondaryBorderBrush}" BorderThickness="2,2,0,2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,8"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" Value="{StaticResource MagicTextMediumBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter TargetName="Body" Property="BorderBrush" Value="{StaticResource MagicShadowBrush}"/>
+                            <Setter TargetName="Shadow" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="Body" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect ShadowDepth="2" Direction="270" Color="Black" Opacity="0.2" BlurRadius="4" RenderingBias="Quality"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="LastMimiRadioButton" TargetType="RadioButton" BasedOn="{StaticResource MimiRadioButtonStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid>
+                        <Border x:Name="Shadow" CornerRadius="0,10,10,0" Background="{StaticResource BtnSecondaryShadowBrush}" Margin="2,2,0,0"/>
+                        <Border x:Name="Body" CornerRadius="0,10,10,0" Background="{TemplateBinding Background}" BorderBrush="{StaticResource BtnSecondaryBorderBrush}" BorderThickness="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,8"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" Value="{StaticResource MagicTextMediumBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter TargetName="Body" Property="BorderBrush" Value="{StaticResource MagicShadowBrush}"/>
+                            <Setter TargetName="Shadow" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="Body" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect ShadowDepth="2" Direction="270" Color="Black" Opacity="0.2" BlurRadius="4" RenderingBias="Quality"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

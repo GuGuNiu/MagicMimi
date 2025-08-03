@@ -1,0 +1,140 @@
+﻿<Window x:Class="MagicMimi.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:MagicMimi.WPF.ViewModels"
+        xmlns:models="clr-namespace:MagicMimi.WPF.Models"
+        xmlns:converters="clr-namespace:MagicMimi.WPF.Converters"
+        mc:Ignorable="d"
+        Title="咕咕牛万能咪咪" Height="720" Width="1100"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        MouseDown="Window_MouseDown">
+
+    <Window.DataContext>
+        <viewModels:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:IsScanningToButtonTextConverter x:Key="IsScanningToButtonTextConverter"/>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Image x:Name="DesktopBackground" Stretch="Fill"/>
+
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="420"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource ContentPanelStyle}">
+                <StackPanel>
+                    <Border BorderBrush="{StaticResource MagicBorderLightBrush}" BorderThickness="0,0,0,3" Padding="0,0,0,20" Margin="0,0,0,15">
+                        <TextBlock x:Name="AppTitle" Text="咕咕牛万能咪咪" Style="{StaticResource AppTitleStyle}" Loaded="AppTitle_Loaded"/>
+                    </Border>
+
+                    <TextBlock Text="账户管理" Style="{StaticResource SectionTitleStyle}"/>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" ItemsSource="{Binding Accounts}"
+                                  SelectedItem="{Binding SelectedAccount}"
+                                  DisplayMemberPath="Name"
+                                  Style="{StaticResource MimiComboBoxStyle}"/>
+                        <Button Grid.Column="1" Content="删除"
+                                Command="{Binding DeleteAccountCommand}"
+                                Style="{StaticResource MimiButtonDangerStyle}" Margin="10,0,0,0"/>
+                    </Grid>
+                    <Button Content="扫码登录 获取Stoken" Command="{Binding ShowLoginDialogCommand}" Style="{StaticResource MimiButtonSecondaryStyle}" Margin="0,0,0,20"/>
+                    <Button Content="手动输入 Stoken" Command="{Binding ShowManualAddDialogCommand}" Style="{StaticResource MimiButtonSecondaryStyle}" Margin="0,0,0,20"/>
+
+                    <TextBlock Text="扫描任务" Style="{StaticResource SectionTitleStyle}"/>
+                    <TextBlock Text="目标窗口" Margin="0,0,0,5" Foreground="{StaticResource MagicTextDarkBrush}"/>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox Grid.Column="0" ItemsSource="{Binding Windows}"
+                                  SelectedItem="{Binding SelectedWindow}"
+                                  DisplayMemberPath="Title"
+                                  Style="{StaticResource MimiComboBoxStyle}"/>
+                        <Button Grid.Column="1" Content="刷新" Command="{Binding RefreshWindowsCommand}" Style="{StaticResource MimiButtonSecondaryStyle}" Margin="10,0,0,0"/>
+                    </Grid>
+
+                    <TextBlock Text="游戏" Margin="0,5,0,5" Foreground="{StaticResource MagicTextDarkBrush}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,25">
+                        <RadioButton Content="原神" IsChecked="{Binding SelectedGameType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=4}" Style="{StaticResource FirstMimiRadioButton}"/>
+                        <RadioButton Content="星穹铁道" IsChecked="{Binding SelectedGameType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=8}" Style="{StaticResource LastMimiRadioButton}"/>
+                    </StackPanel>
+
+                    <Button Content="{Binding IsScanning, Converter={StaticResource IsScanningToButtonTextConverter}}"
+                            Command="{Binding StartStopScanCommand}"
+                            Style="{StaticResource MimiButtonActionStyle}"
+                            HorizontalAlignment="Stretch"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource ContentPanelStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="实时日志" Style="{StaticResource SectionTitleStyle}"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-45,0,15">
+                        <TextBlock Text="状态:" FontWeight="SemiBold" Foreground="{StaticResource MagicTextMediumBrush}"/>
+                        <TextBlock Text="{Binding StatusText}" Margin="5,0,0,0" Foreground="{StaticResource MagicTextDarkBrush}"/>
+                    </StackPanel>
+
+                    <Border Grid.Row="2" Background="{StaticResource MagicBgBrush}" BorderBrush="{StaticResource MagicBorderLightBrush}" BorderThickness="2" CornerRadius="8" Padding="10">
+                        <ScrollViewer x:Name="LogScrollViewer" VerticalScrollBarVisibility="Auto" Loaded="LogScrollViewer_Loaded">
+                            <ItemsControl ItemsSource="{Binding Logs}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:LogEntry}">
+                                        <TextBlock FontFamily="{StaticResource MonoFont}" FontSize="14" TextWrapping="Wrap">
+                                            <Run Text="{Binding Timestamp, StringFormat='[{0}] '}" Foreground="Gray"/>
+                                            <Run x:Name="MessageRun" Text="{Binding Message}"/>
+                                        </TextBlock>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Level}" Value="SUCCESS">
+                                                <Setter TargetName="MessageRun" Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Level}" Value="ERROR">
+                                                <Setter TargetName="MessageRun" Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Level}" Value="WARN">
+                                                <Setter TargetName="MessageRun" Property="Foreground" Value="{StaticResource WarningBrush}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Level}" Value="INFO">
+                                                <Setter TargetName="MessageRun" Property="Foreground" Value="{StaticResource MagicTextDarkBrush}"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-15,-15,0">
+                <Button Content="—" Command="{Binding MinimizeWindowCommand}" Style="{StaticResource WindowControlButton}"/>
+                <Button Content="✕" Command="{Binding CloseWindowCommand}" Style="{StaticResource WindowControlButton}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
