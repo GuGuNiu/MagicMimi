@@ -40,7 +40,7 @@
 这是一个使用 Python 和 PySide6 (Qt for Python) 构建的现代化、跨平台桌面应用程序。它将所有功能打包在一个独立的可执行文件中，是功能最完善、最稳定的版本。
 
 #### 截图预览
-![PySide6 Version Screenshot](https://i.imgur.com/WpP8PIM.png) 
+![PySide6 Version Screenshot](https://s2.loli.net/2025/08/09/t8PwSsEJZfzNFCk.png) 
 
 #### 环境要求
 *   Python 3.8+
